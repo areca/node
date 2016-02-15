@@ -3,12 +3,14 @@ var app = express();
 var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
+var dbUrl = 'mongodb://bitcher:sharethis@ds055525.mongolab.com:55525/bitch';
+
 mongoose.connection.once('connected',function(){
-	console.log('Connected to DB');
+    console.log('Connected to DB ' + dbUrl);
 });
 
-mongoose.connect('mongodb://bitcher:sharethis@ds055525.mongolab.com:55525/bitch',function(err){
-	if(err) console.log(err);
+mongoose.connect(dbUrl,function(err){
+    if(err) console.log(err);
 });
 
 var Bear = require('./app/models/bear');
