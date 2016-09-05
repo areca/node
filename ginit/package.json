@@ -12,6 +12,9 @@
   ],
   "author": "Kudret Serin",
   "license": "ISC",
+  "bin": {
+    "ginit": "./index.js"
+  },
   "dependencies": {
     "chalk": "^1.1.3",
     "clear": "0.0.1",
