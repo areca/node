@@ -1,0 +1,15 @@
+{
+  "name": "getting-started-hapi",
+  "version": "1.0.0",
+  "description": "Getting Started with Hapi.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bootstrap.js"
+  },
+  "keywords": [
+    "hapi"
+  ],
+  "author": "Kudret Serin",
+  "license": "ISC"
+}
