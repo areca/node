@@ -11,5 +11,10 @@
     "hapi"
   ],
   "author": "Kudret Serin",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0",
+    "hapi": "^15.0.3"
+  }
 }
