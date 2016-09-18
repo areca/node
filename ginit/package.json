@@ -10,7 +10,7 @@
     "git",
     "CLI"
   ],
-  "author": "Kudret Serin",
+  "author": "Areca",
   "license": "ISC",
   "bin": {
     "ginit": "./index.js"
