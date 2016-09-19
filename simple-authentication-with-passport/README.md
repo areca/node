@@ -7,4 +7,6 @@ express
 express-session
 redis  
 passport  
-passport-local
+passport-local  
+
+TODO: Make it with runnable with redis instance
