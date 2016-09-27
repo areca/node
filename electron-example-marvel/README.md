@@ -4,3 +4,5 @@ Tut from https://www.sitepoint.com/desktop-node-apps-with-electron/
 
 Tech:  
 dotenv
+
+Run with 'electon .'
