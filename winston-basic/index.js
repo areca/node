@@ -8,6 +8,7 @@ const logDir = 'log';
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
 }
+
 const tsFormat = () => (new Date()).toLocaleTimeString();
 
 const logger = new (winston.Logger)({
@@ -18,14 +19,17 @@ const logger = new (winston.Logger)({
       colorize: true,
       level: 'info'
     }),
-    new (winston.transports.File)({
-      filename: `${logDir}/results.log`,
+    new (require('winston-daily-rotate-file'))({
+      filename: `${logDir}/-results.log`,
       timestamp: tsFormat,
-      level: env === 'development' ? 'debug' : 'info'
+      datePattern: 'yyyy-MM-dd',
+      prepend: true,
+      level: env === 'development' ? 'verbose' : 'info'
     })
   ]
 });
-
+logger.debug('Debugging info');
+logger.verbose('Verbose info');
 logger.info('Hello world');
 logger.warn('Warning message');
-logger.debug('Debugging info');
+logger.error('Error info');
