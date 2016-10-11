@@ -1,18 +1,9 @@
 const got = require('got');
+const eol = require('os').EOL;
 const readline = require('readline');
 
 readline.emitKeypressEvents(process.stdin);
 process.stdin.setRawMode(true);
-
-const keyMap = new Map();
-keyMap.set('a', 'AAPL');
-keyMap.set('b', 'BA');
-keyMap.set('c', 'CSCO');
-keyMap.set('d', 'DD');
-keyMap.set('e', 'XOM');
-keyMap.set('f', 'FB');
-keyMap.set('g', 'GOOGL');
-keyMap.set('m', 'MSFT');
 
 function getStockQuote(symbol) {
   const url = `http://finance.google.com/finance/info?client=ig&q=${symbol}`;
@@ -28,9 +19,29 @@ function getStockQuote(symbol) {
     });
 }
 
+const keyMap = new Map();
+keyMap.set('a', 'AAPL');
+keyMap.set('b', 'BA');
+keyMap.set('c', 'CSCO');
+keyMap.set('d', 'DD');
+keyMap.set('e', 'XOM');
+keyMap.set('f', 'FB');
+keyMap.set('g', 'GOOGL');
+keyMap.set('m', 'MSFT');
+
+function listKeys() {
+  console.log(`${eol}keys`);
+  keyMap.forEach((value, key) => {
+    console.log(`${key} - ${value}`);
+  });
+  console.log();
+}
+
 process.stdin.on('keypress', (str, key) => {
   if (key.ctrl && key.name === 'c') {
     process.exit(); // eslint-disable-line no-process-exit
+  } else if (key.name === 'l') {
+    listKeys();
   } else {
     if (keyMap.has(str)) {
       getStockQuote(keyMap.get(str));
@@ -41,3 +52,4 @@ process.stdin.on('keypress', (str, key) => {
 });
 
 console.log('Press a key to retrieve a stock price');
+listKeys();
