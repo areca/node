@@ -4,7 +4,20 @@ var Firebase = require('firebase');
 var fbRef = new Firebase('https://albumz-7548e.firebaseio.com/');
 
 router.get('/', function(req, res, next) {
-  	res.render('genres/index');
+  	var genreRef = fbRef.child('genres');
+
+	genreRef.once('value', function(snapshot){
+		var genres = [];
+		snapshot.forEach(function(childSnapshot){
+			var key = childSnapshot.key();
+			var childData = childSnapshot.val();
+			genres.push({
+				id: key,
+				name: childData.name
+			});
+		});
+		res.render('genres/index',{genres: genres});
+	});
 });
 
 router.get('/add', function(req, res, next) {
