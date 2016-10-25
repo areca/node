@@ -90,4 +90,66 @@ router.get('/details/:id', function(req, res){
 	});
 });
 
+router.get('/edit/:id', function(req, res, next) {
+	var id = req.params.id;
+	var albumRef = new Firebase('https://albumz-7548e.firebaseio.com/albums/'+id);
+
+	var genreRef = fbRef.child('genres');
+
+	genreRef.once('value', function(snapshot){
+		var genres = [];
+		snapshot.forEach(function(childSnapshot){
+			var key = childSnapshot.key();
+			var childData = childSnapshot.val();
+			genres.push({
+				id: key,
+				name: childData.name
+			});
+		});
+		albumRef.once("value", function(snapshot) {
+		var album = snapshot.val();
+		res.render('albums/edit', {album: album, id: id, genres: genres});
+	});
+	});
+});
+
+
+router.post('/edit/:id', upload.single('cover'), function(req, res, next) {
+	var id = req.params.id;
+	var albumRef = new Firebase('https://albumz-7548e.firebaseio.com/albums/'+id);
+
+	// Check File Upload
+	if(req.file){
+		// get Cover Filename
+		var cover = req.file.filename;
+
+	  	// Update Album With Cover
+		albumRef.update({
+			artist: req.body.artist,
+			title: req.body.title,
+			genre: req.body.genre,
+			info: req.body.info,
+			year: req.body.year,
+			label: req.body.label,
+			tracks: req.body.tracks,
+			cover: cover
+		});
+	} else {
+	  	// Update Album Without Cover
+		albumRef.update({
+			artist: req.body.artist,
+			title: req.body.title,
+			genre: req.body.genre,
+			info: req.body.info,
+			year: req.body.year,
+			label: req.body.label,
+			tracks: req.body.tracks
+		});
+	}
+
+	req.flash('success_msg', 'Album Updated');
+	res.redirect('/albums/details/'+id);
+});
+
+
 module.exports = router;
