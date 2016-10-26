@@ -19,10 +19,12 @@ router.get('/', function(req, res, next) {
 		snapshot.forEach(function(childSnapshot){
 			var key = childSnapshot.key;
 			var childData = childSnapshot.val();
-			genres.push({
-				id: key,
-				name: childData.name
-			});
+      if(childData.uid == firebase.auth().currentUser.uid){
+        genres.push({
+  				id: key,
+  				name: childData.name
+  			});
+      }
 		});
 		res.render('genres/index',{genres: genres});
 	});
@@ -34,7 +36,8 @@ router.get('/add', function(req, res, next) {
 
 router.post('/add', function(req, res, next) {
   	var genre = {
-  		name: req.body.name
+  		name: req.body.name,
+      uid: firebase.auth().currentUser.uid
   	}
 
   	var genreRef = fbRef.child('genres');

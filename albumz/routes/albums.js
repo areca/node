@@ -8,7 +8,7 @@ var upload = multer({dest:'./public/images/uploads'});
 router.get('*', function(req, res, next) {
 	// Check Authentication
 	if(firebase.auth().currentUser == null){
-	  	res.redirect('/users/login');      
+	  	res.redirect('/users/login');
 	} else next();
 });
 
@@ -20,16 +20,18 @@ router.get('/', function(req, res, next) {
 		snapshot.forEach(function(childSnapshot){
 			var key = childSnapshot.key;
 			var childData = childSnapshot.val();
-			albums.push({
-				id: key,
-				artist: childData.artist,
-				genre: childData.genre,
-				info: childData.info,
-				title: childData.title,
-				label: childData.label,
-				tracks: childData.tracks,
-				cover: childData.cover
-			});
+      if(childData.uid == firebase.auth().currentUser.uid){
+  			albums.push({
+  				id: key,
+  				artist: childData.artist,
+  				genre: childData.genre,
+  				info: childData.info,
+  				title: childData.title,
+  				label: childData.label,
+  				tracks: childData.tracks,
+  				cover: childData.cover
+  			});
+      }
 		});
 		res.render('albums/index',{albums: albums});
 	});
@@ -73,6 +75,7 @@ router.post('/add', upload.single('cover'),function(req, res, next) {
 		label: req.body.label,
 		tracks: req.body.tracks,
 		cover: cover,
+    uid: firebase.auth().currentUser.uid
 	}
 
 	// Create Reference
