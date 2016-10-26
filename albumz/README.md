@@ -4,10 +4,11 @@ Tut from Eduonix at udemy "Learn Nodejs by building 12 projects"
 Section 9
 
 Tech:
-Firebase  
-multer  
-ejs  
-express  
+Custom Bootstrap Theme  
+Firebase Database  
+Firebase register / login functionality  
+Access Control  
+File Uploading 
 
 TODO:  
 
