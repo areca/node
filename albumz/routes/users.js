@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var Firebase = require('firebase');
-var fbRef = new Firebase('https://albumz-7548e.firebaseio.com/');
+var firebase = require('../config/firebase');
+var fbRef = firebase.database().ref();
 
 router.get('/register', function(req, res, next) {
   	res.render('users/register');
@@ -12,7 +12,7 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-  	var first_name = req.body.first_name;
+  var first_name = req.body.first_name;
 	var last_name = req.body.last_name;
 	var email = req.body.email;
 	var password = req.body.password;
@@ -35,14 +35,11 @@ router.post('/register', function(req, res, next) {
 			errors: errors
 		});
 	} else {
-		fbRef.createUser({
-			email: email,
-			password: password
-		}, function(error, userData){
-			if(error){
-				console.log("Error creating user: ", error);
-			} else {
-				console.log("Successfully created user with uid:",userData.uid);
+
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(function(userData){
+        console.log('user object:' + user);
+        //you can save the user data here.
+        console.log("Successfully created user with uid:",userData.uid);
 				var user = {
 					uid: userData.uid,
 					email: email,
@@ -58,8 +55,15 @@ router.post('/register', function(req, res, next) {
 
 				req.flash('success_msg', 'You are now registered and can login');
 				res.redirect('/users/login');
-			}
-		});
+
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log("Error creating user: ", errorMessage);
+      // ...
+    });
+
 	}
 });
 
@@ -79,30 +83,35 @@ router.post('/login', function(req, res, next) {
 			errors: errors
 		});
 	} else {
-		fbRef.authWithPassword({
-			email: email,
-			password: password
-		}, function(error, authData){
-			if(error){
-				console.log("Login Failed: ", error);
-				req.flash('error_msg', 'Login Failed');
-				res.redirect('/users/login');
-			} else {
-				console.log("Authenticated user with uid:",authData);
 
-				req.flash('success_msg', 'You are now logged in');
-				res.redirect('/albums');
-			}
-		});
+    firebase.auth().signInWithEmailAndPassword(email, password).then(function(authData){
+      //console.log("Authenticated user with uid:",authData);
+
+      req.flash('success_msg', 'You are now logged in');
+      res.redirect('/albums');
+
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log("Login Failed: ", errorMessage);
+      req.flash('error_msg', 'Login Failed');
+      res.redirect('/users/login');
+      // ...
+    });
 	}
 });
 
 // Logout User
 router.get('/logout', function(req, res){
 	// Unauthenticate the client
-	fbRef.unauth();
+	firebase.auth().signOut().then(function() {
+    req.flash('success_msg', 'You are logged out');
+  	res.redirect('/users/login');
+  }, function(error) {
+    // An error happened.
+    console.log("Logout Failed: ", error.message);
+  });
 
-	req.flash('success_msg', 'You are logged out');
-	res.redirect('/users/login');
 });
 module.exports = router;

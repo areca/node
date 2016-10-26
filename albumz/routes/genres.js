@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var Firebase = require('firebase');
-var fbRef = new Firebase('https://albumz-7548e.firebaseio.com/');
+var firebase = require('../config/firebase');
+var fbRef = firebase.database().ref();
 
 router.get('/', function(req, res, next) {
   	var genreRef = fbRef.child('genres');
@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 	genreRef.once('value', function(snapshot){
 		var genres = [];
 		snapshot.forEach(function(childSnapshot){
-			var key = childSnapshot.key();
+			var key = childSnapshot.key;
 			var childData = childSnapshot.val();
 			genres.push({
 				id: key,
@@ -38,7 +38,7 @@ router.post('/add', function(req, res, next) {
 
 router.get('/edit/:id', function(req, res, next) {
 	var id = req.params.id;
-	var genreRef = new Firebase('https://albumz-7548e.firebaseio.com/genres/'+id);
+	var genreRef = fbRef.child('genres').child(id);
 
 	genreRef.once("value", function(snapshot) {
 		var genre = snapshot.val();
@@ -49,7 +49,7 @@ router.get('/edit/:id', function(req, res, next) {
 router.post('/edit/:id', function(req, res, next) {
 	var id = req.params.id;
 	var name = req.body.name;
-	var genreRef = new Firebase('https://albumz-7548e.firebaseio.com/genres/'+id);
+	var genreRef = fbRef.child('genres').child(id);
 
 	genreRef.update({
 		name: name
@@ -60,7 +60,7 @@ router.post('/edit/:id', function(req, res, next) {
 
 router.delete('/delete/:id', function(req, res, next) {
 	var id = req.params.id;
-	var genreRef = new Firebase('https://albumz-7548e.firebaseio.com/genres/'+id);
+	var genreRef = fbRef.child('genres').child(id);
 
 	genreRef.remove();
 

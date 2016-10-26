@@ -6,8 +6,6 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var expressValidator = require('express-validator');
 var flash = require('connect-flash');
-var Firebase = require('firebase');
-var fbRef = new Firebase('https://albumz-7548e.firebaseapp.com/');
 
 // Route Files
 var routes = require('./routes/index');

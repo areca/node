@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var Firebase = require('firebase');
-var fbRef = new Firebase('https://albumz-7548e.firebaseio.com/');
+var firebase = require('../config/firebase');
+var fbRef = firebase.database().ref();
 var multer = require('multer');
 var upload = multer({dest:'./public/images/uploads'});
 
@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 	albumRef.once('value', function(snapshot){
 		var albums = [];
 		snapshot.forEach(function(childSnapshot){
-			var key = childSnapshot.key();
+			var key = childSnapshot.key;
 			var childData = childSnapshot.val();
 			albums.push({
 				id: key,
@@ -34,7 +34,7 @@ router.get('/add', function(req, res, next) {
 	genreRef.once('value', function(snapshot){
 		var data = [];
 		snapshot.forEach(function(childSnapshot){
-			var key = childSnapshot.key();
+			var key = childSnapshot.key;
 			var childData = childSnapshot.val();
 			data.push({
 				id: key,
@@ -81,8 +81,7 @@ router.post('/add', upload.single('cover'),function(req, res, next) {
 
 router.get('/details/:id', function(req, res){
 	var id = req.params.id;
-
-	var albumRef = new Firebase('https://albumz-7548e.firebaseio.com/albums/'+id);
+  var albumRef = fbRef.child('albums').child(id);
 
 	albumRef.once('value', function(snapshot){
 		var album = snapshot.val();
@@ -92,14 +91,14 @@ router.get('/details/:id', function(req, res){
 
 router.get('/edit/:id', function(req, res, next) {
 	var id = req.params.id;
-	var albumRef = new Firebase('https://albumz-7548e.firebaseio.com/albums/'+id);
+	var albumRef = fbRef.child('albums').child(id);
 
 	var genreRef = fbRef.child('genres');
 
 	genreRef.once('value', function(snapshot){
 		var genres = [];
 		snapshot.forEach(function(childSnapshot){
-			var key = childSnapshot.key();
+			var key = childSnapshot.key;
 			var childData = childSnapshot.val();
 			genres.push({
 				id: key,
@@ -116,7 +115,7 @@ router.get('/edit/:id', function(req, res, next) {
 
 router.post('/edit/:id', upload.single('cover'), function(req, res, next) {
 	var id = req.params.id;
-	var albumRef = new Firebase('https://albumz-7548e.firebaseio.com/albums/'+id);
+	var albumRef = fbRef.child('albums').child(id);
 
 	// Check File Upload
 	if(req.file){
@@ -153,13 +152,12 @@ router.post('/edit/:id', upload.single('cover'), function(req, res, next) {
 
 router.delete('/delete/:id', function(req, res, next) {
 	var id = req.params.id;
-	var albumRef = new Firebase('https://albumz-7548e.firebaseio.com/albums/'+id);
+	var albumRef = fbRef.child('albums').child(id);
 
 	albumRef.remove();
 
 	req.flash('success_msg','Album Deleted');
 	res.send(200);
 });
-
 
 module.exports = router;
