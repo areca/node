@@ -11,4 +11,4 @@ express
 
 TODO:  
 
-Change firebase authentication  
+Firebase API Key Env variable olmalı
