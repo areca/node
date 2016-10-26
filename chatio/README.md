@@ -8,3 +8,5 @@ Socket.io
 Using websockets for client-server communication  
 App deployment with Heroku  
 
+TODO:  
+can be moved to socketio folder
