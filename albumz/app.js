@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var expressValidator = require('express-validator');
 var flash = require('connect-flash');
+var firebase = require('./config/firebase');
+var fbRef = firebase.database().ref();
 
 // Route Files
 var routes = require('./routes/index');
@@ -64,6 +66,19 @@ app.use(function (req, res, next) {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
+  res.locals.currentUserData = firebase.auth().currentUser;
+  res.locals.page = req.url;
+  next();
+});
+
+// Get User Info
+app.get('*', function(req, res, next){
+  if(firebase.auth().currentUser != null){
+    var userRef = fbRef.child('users');
+    userRef.orderByChild("uid").startAt(firebase.auth().currentUser.uid).endAt(firebase.auth().currentUser.uid).on("child_added", function(snapshot) {
+      res.locals.user = snapshot.val();
+    });
+  }
   next();
 });
 

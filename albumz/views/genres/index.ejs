@@ -1,6 +1,8 @@
 <% include ../partials/header %>
 	<h1>Genres
+	<% if(currentUserData != null){ %>
 		<a href="/genres/add" class="btn btn-success pull-right">Add Genre</a>
+	<% } %>
 	</h1>
 
 	<table class="table table-striped">
@@ -15,9 +17,11 @@
 				<tr>
 					<td><%= genres[i].name %></td>
 					<td>
+					<% if(currentUserData != null){ %>
 						<a href="/genres/edit/<%= genres[i].id %>" class="btn btn-default">Edit</a>
 
 						<a data-id="<%= genres[i].id %>" class="btn btn-danger delete-genre">Delete</a>
+					<% } %>
 					</td>
 				</tr>
 			<% } %>

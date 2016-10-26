@@ -3,6 +3,14 @@ var router = express.Router();
 var firebase = require('../config/firebase');
 var fbRef = firebase.database().ref();
 
+router.get('*', function(req, res, next) {
+	// Check Authentication
+	if(firebase.auth().currentUser == null){
+	  	res.redirect('/users/login');
+	}
+	next();
+});
+
 router.get('/', function(req, res, next) {
   	var genreRef = fbRef.child('genres');
 
