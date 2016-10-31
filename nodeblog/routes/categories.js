@@ -1,11 +1,22 @@
 var express = require('express');
 var router = express.Router();
 var mongo = require('mongodb');
-var db = require('monk')('localhost/nodeblog');
+var db = require('monk')('mongodb://bitcher:sharethis@ds055525.mongolab.com:55525/bitch');
+
+router.get('/show/:category', function(req, res, next) {
+	var posts = db.get('posts');
+
+	posts.find({category: req.params.category},{},function(err, posts){
+		res.render('index',{
+  			'title': req.params.category,
+  			'posts': posts
+  		});
+	});
+});
 
 router.get('/add', function(req, res, next) {
 	res.render('addcategory',{
-  		'title': 'Add Category'	
+  		'title': 'Add Category'
 	});
 });
 

@@ -10,7 +10,7 @@ var upload = multer({ dest: 'uploads/' })
 var expressValidator = require('express-validator');
 
 var mongo = require('mongodb');
-var db = require('monk')('localhost/nodeblog');
+var db = require('monk')('mongodb://bitcher:sharethis@ds055525.mongolab.com:55525/bitch');
 
 var routes = require('./routes/index');
 var posts = require('./routes/posts');
@@ -19,6 +19,11 @@ var categories = require('./routes/categories');
 var app = express();
 
 app.locals.moment = require('moment');
+
+app.locals.truncateText = function(text, length){
+  var truncatedText = text.substring(0, length);
+  return truncatedText;
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

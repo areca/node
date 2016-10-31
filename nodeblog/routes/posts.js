@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var multer = require('multer');
-var upload = multer({ dest: 'uploads/' })
+var upload = multer({ dest: './public/images' })
 var mongo = require('mongodb');
-var db = require('monk')('localhost/nodeblog');
+var db = require('monk')('mongodb://bitcher:sharethis@ds055525.mongolab.com:55525/bitch');
 
 router.get('/add', function(req, res, next) {
 	var categories = db.get('categories');
