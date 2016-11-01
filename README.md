@@ -1,2 +1,0 @@
-# node
-workspace for node
