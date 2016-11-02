@@ -6,4 +6,5 @@ Tech:
 HTML Kickstart framework  
 Multiple user type login / registration  
 Passport authentication  
-MongoDB a
+MongoDB and Mongoose ORM  
+ 
