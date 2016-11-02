@@ -8,3 +8,7 @@ EJS Template Engine
 PostgreSQL relational database  
 CRUD Functionality  
 
+TODO:  
+
+Start from scratch
+
