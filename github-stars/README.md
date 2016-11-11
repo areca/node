@@ -8,4 +8,4 @@ Redis
 Axios  
 response-time  
 
-When running be sure local redis instance is running
+Be sure local redis instance is running
