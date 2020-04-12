@@ -1,0 +1,1 @@
+Sample implementation for securing a rest api with jwt
