@@ -4,7 +4,7 @@ const protoLoader = require('@grpc/proto-loader');
 const PROTO_PATH = 'chat.proto';
 const SERVER_URI = '0.0.0.0:50051';
 
-const usersInChat = [];
+let usersInChat = [];
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH);
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
@@ -16,7 +16,7 @@ const joinChat = joinChatRequest => {
 
     joinChatRequest.on('cancelled', () => {
         usersInChat = usersInChat.filter(user => user !== joinChatRequest);
-    })
+    });
 
     usersInChat.push(joinChatRequest);
     console.table(usersInChat);
